@@ -171,6 +171,9 @@ zyxel,keenetic-extra-ii)
 	ucidef_set_led_switch "internet" "internet" "green:internet" "switch0" "0x01"
 	;;
 esac
+	zyxel,keenetic-4g-iii-b)
+	ucidef_set_led_netdev "wifi_led" "wifi" "green:wifi" "phy0-ap0" "link tx rx"
+	;;
 
 board_config_flush
 

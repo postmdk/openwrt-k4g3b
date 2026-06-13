@@ -1,0 +1,83 @@
+name: Build and Release OpenWrt for Keenetic 4G III rev. B
+
+on:
+  push:
+    branches:
+      - mt7628-keenetic-4g3b-v23.05.6
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install Build Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential clang flex bison g++ gawk \
+          gettext git libncurses5-dev libssl-dev python3-setuptools rsync \
+          unzip zlib1g-dev file wget subversion patch swig time
+
+    - name: Update and Install Feeds
+      run: |
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
+        # ХАК: Пишем пустышку через printf, чтобы YAML-парсер не спотыкался о синтаксис Makefile
+        mkdir -p package/feeds/telephony/dahdi-linux
+        printf 'include $(TOPDIR)/rules.mk\n\nPKG_NAME:=dahdi-linux\nPKG_VERSION:=3.2.0\nPKG_RELEASE:=1\n\ninclude $(INCLUDE_DIR)/package.mk\n\ndefine Package/kmod-dahdi-linux\n  SECTION:=kernel\n  CATEGORY:=Kernel modules\n  SUBMENU:=Voice Support\n  TITLE:=DAHDI Isabelle Dummy\n  FILES:=\nendef\n\ndefine Build/Compile\n\t@echo "Dummy compile for DAHDI to save vermagic"\nendef\n\n$(eval $(call BuildPackage,kmod-dahdi-linux))\n' > package/feeds/telephony/dahdi-linux/Makefile
+
+    - name: Load and Adapt Custom Configuration
+      run: |
+        if [ -f keenetic_4g_iii_rev_b.config ]; then
+          cp keenetic_4g_iii_rev_b.config .config
+        elif [ -f target/linux/ramips/image/keenetic_4g_iii_rev_b.config ]; then
+          cp target/linux/ramips/image/keenetic_4g_iii_rev_b.config .config
+        else
+          echo "Базовый файл конфигурации не найден!"
+        fi
+
+        # Меняем таргет под твой новый DTS монолит
+        sed -i '/CONFIG_TARGET_ramips_mt76x8_DEVICE_/d' .config
+        echo "CONFIG_TARGET_ramips=y" >> .config
+        echo "CONFIG_TARGET_ramips_mt76x8=y" >> .config
+        echo "CONFIG_TARGET_ramips_mt76x8_DEVICE_zyxel_keenetic-4g-iii-b=y" >> .config
+        
+        make defconfig
+
+    - name: Compile Firmware
+      run: |
+        make -j1 BUILD_LOG=1
+
+    - name: Organize Files
+      id: organize
+      run: |
+        mkdir -p out/
+        # Жёстко забираем все файлы (прошивки, манифесты, json, xz-архивы) без привязки к имени
+        find bin/targets/ramips/mt76x8/ -maxdepth 1 -type f -exec cp {} out/ \;
+        echo "TAG_NAME=build-$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
+        echo "status=success" >> $GITHUB_OUTPUT
+
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "out/*"
+        allowUpdates: true
+        draft: false
+        prerelease: false
+        tag: ${{ env.TAG_NAME }}
+        name: ${{ env.TAG_NAME }}
+        body: |
+          OpenWrt Firmware Release
+          Target: Keenetic 4G III rev. B (MT7628an)
+          Layout: U-Boot layout (ubootmod)
+          Branch: `${{ github.ref_name }}`
+        token: ${{ secrets.GITHUB_TOKEN }}
