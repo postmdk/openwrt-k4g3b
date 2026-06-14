@@ -31,8 +31,8 @@ jobs:
         ./scripts/feeds install -a
 
         # ХАК: Пишем пустышку через printf, чтобы YAML-парсер не спотыкался о синтаксис Makefile
-        mkdir -p package/feeds/telephony/dahdi-linux
-        printf 'include $(TOPDIR)/rules.mk\n\nPKG_NAME:=dahdi-linux\nPKG_VERSION:=3.2.0\nPKG_RELEASE:=1\n\ninclude $(INCLUDE_DIR)/package.mk\n\ndefine Package/kmod-dahdi-linux\n  SECTION:=kernel\n  CATEGORY:=Kernel modules\n  SUBMENU:=Voice Support\n  TITLE:=DAHDI Isabelle Dummy\n  FILES:=\nendef\n\ndefine Build/Compile\n\t@echo "Dummy compile for DAHDI to save vermagic"\nendef\n\n$(eval $(call BuildPackage,kmod-dahdi-linux))\n' > package/feeds/telephony/dahdi-linux/Makefile
+        # mkdir -p package/feeds/telephony/dahdi-linux
+        # printf 'include $(TOPDIR)/rules.mk\n\nPKG_NAME:=dahdi-linux\nPKG_VERSION:=3.2.0\nPKG_RELEASE:=1\n\ninclude $(INCLUDE_DIR)/package.mk\n\ndefine Package/kmod-dahdi-linux\n  SECTION:=kernel\n  CATEGORY:=Kernel modules\n  SUBMENU:=Voice Support\n  TITLE:=DAHDI Isabelle Dummy\n  FILES:=\nendef\n\ndefine Build/Compile\n\t@echo "Dummy compile for DAHDI to save vermagic"\nendef\n\n$(eval $(call BuildPackage,kmod-dahdi-linux))\n' > package/feeds/telephony/dahdi-linux/Makefile
 
     - name: Load and Adapt Custom Configuration
       run: |
@@ -44,12 +44,12 @@ jobs:
           echo "Базовый файл конфигурации не найден!"
         fi
 
-        # Меняем таргет под твой новый DTS монолит
+        # Меняем таргет под новый DTS монолит
         sed -i '/CONFIG_TARGET_ramips_mt76x8_DEVICE_/d' .config
         echo "CONFIG_TARGET_ramips=y" >> .config
         echo "CONFIG_TARGET_ramips_mt76x8=y" >> .config
         echo "CONFIG_TARGET_ramips_mt76x8_DEVICE_zyxel_keenetic-4g-iii-b-ubootmod=y" >> .config
-        
+
         make defconfig
 
     - name: Compile Firmware
