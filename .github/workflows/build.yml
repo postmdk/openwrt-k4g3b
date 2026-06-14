@@ -1,10 +1,13 @@
 name: Build and Release OpenWrt for Keenetic 4G III rev. B
 
 on:
-  push:
-    branches:
-      - mt7628-keenetic-4g3b-v23.05.6
   workflow_dispatch:
+    inputs:
+      clear_cache:
+        description: 'Clear ccache before build'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -49,7 +52,7 @@ jobs:
         sed -i '/CONFIG_TARGET_ramips_mt76x8_DEVICE_/d' .config
         echo "CONFIG_TARGET_ramips=y" >> .config
         echo "CONFIG_TARGET_ramips_mt76x8=y" >> .config
-        echo "CONFIG_TARGET_ramips_mt76x8_DEVICE_zyxel_keenetic-4g-iii-b=y" >> .config
+        echo "CONFIG_TARGET_ramips_mt76x8_DEVICE_zyxel_keenetic-4g-iii-b-ubootmod=y" >> .config
         
         make defconfig
 
