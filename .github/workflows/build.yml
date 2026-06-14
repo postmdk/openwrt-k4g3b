@@ -1,14 +1,10 @@
 name: Build and Release OpenWrt for Keenetic 4G III rev. B
 
 on:
+  push:
+    branches:
+      - mt7628-keenetic-4g3b-v23.05.6
   workflow_dispatch:
-    inputs:
-      clear_cache:
-        description: 'Clear ccache before build'
-        required: false
-        type: boolean
-        default: false
-
 permissions:
   contents: write
 
