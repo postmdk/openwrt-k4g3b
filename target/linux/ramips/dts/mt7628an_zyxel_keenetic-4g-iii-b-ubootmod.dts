@@ -1,0 +1,165 @@
+#include "mt7628an.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	compatible = "zyxel,keenetic-4g-iii-b", "mediatek,mt7628an-soc";
+	model = "Keenetic 4G III rev. B (OpenWrt U-Boot layout)";
+
+	aliases {
+		led-boot = &led_power;
+		led-failsafe = &led_power;
+		led-running = &led_power;
+		led-upgrade = &led_power;
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,57600n8";
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		wps {
+			label = "wps";
+			linux,code = <KEY_WPS_BUTTON>;
+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+		};
+
+		reset {
+			label = "reset";
+			linux,code = <KEY_RESTART>;
+			gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_power: power {
+			label = "green:power";
+			gpios = <&gpio 38 GPIO_ACTIVE_LOW>;
+		};
+
+
+		internet {
+			label = "green:internet";
+			gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
+		};
+
+
+		wifi {
+			label = "green:wifi";
+			gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
+		};
+
+		usb {
+			label = "green:usb";
+			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "netdev";
+		};
+	};
+
+	usb_vbus: regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "usb_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
+		regulator-always-on;
+		regulator-boot-on;
+		enable-active-low;
+	};
+};
+
+&spi0 {
+	status = "okay";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <32000000>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "u-boot";
+				reg = <0x0 0x30000>;
+				read-only;
+			};
+
+			partition@30000 {
+				label = "u-config";
+				reg = <0x30000 0x10000>;
+				read-only;
+			};
+
+			factory: partition@40000 {
+				label = "rf-eeprom";
+				reg = <0x40000 0x10000>;
+				read-only;
+			};
+
+			firmware1: partition@50000 {
+				label = "firmware";
+				reg = <0x50000 0xfb0000>;
+				compatible = "denx,uimage";
+			};
+		};
+	};
+};
+
+&ethernet {
+	nvmem-cells = <&macaddr_factory_4>;
+	nvmem-cell-names = "mac-address";
+};
+
+&esw {
+	mediatek,portmap = <0x11>;
+};
+
+&wmac {
+	status = "okay";
+	mediatek,mtd-eeprom = <&factory 0x0>;
+};
+
+&pcie {
+	status = "disabled";
+};
+
+&state_default {
+	gpio {
+		groups = "gpio", "i2s", "refclk", "spi cs1";
+		function = "gpio";
+	};
+};
+
+&ehci {
+	status = "okay";
+	vbus-supply = <&usb_vbus>;
+};
+
+&ohci {
+	status = "okay";
+	vbus-supply = <&usb_vbus>;
+};
+
+&usbphy {
+	status = "okay";
+	vbus-supply = <&usb_vbus>;
+};
+
+&factory {
+	compatible = "nvmem-cells";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	macaddr_factory_4: macaddr@4 {
+		reg = <0x4 0x6>;
+	};
+};

@@ -1242,3 +1242,13 @@ define Device/zyxel_keenetic-extra-ii
 	check-size | zyimage -d 6162 -v "ZyXEL Keenetic Extra II"
 endef
 TARGET_DEVICES += zyxel_keenetic-extra-ii
+
+define Device/zyxel_keenetic-4g-iii-b-ubootmod
+  IMAGE_SIZE := 16128k
+  DEVICE_VENDOR := ZyXEL
+  DEVICE_MODEL := Keenetic 4G III rev. B
+  DEVICE_VARIANT := U-Boot layout
+  DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci \
+        kmod-usb-ledtrig-usbport
+endef
+TARGET_DEVICES += zyxel_keenetic-4g-iii-b-ubootmod
