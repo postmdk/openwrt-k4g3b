@@ -198,7 +198,7 @@ zyxel,keenetic-extra-ii)
 	ucidef_set_led_netdev "wifi_led" "wifi" "green:wifi" "wlan0"
 	ucidef_set_led_switch "internet" "internet" "green:internet" "switch0" "0x01"
 	;;
-zyxel,keenetic-4g-iii-b-ubootmod)
+zyxel,keenetic-4g-iii-b)
         ucidef_set_led_netdev "wifi_led" "wifi" "green:wifi" "phy0-ap0" "link tx rx"
         ucidef_set_led_switch "internet" "internet" "green:internet" "switch0" "0x01"
         ;;
