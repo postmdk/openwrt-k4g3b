@@ -1245,7 +1245,7 @@ TARGET_DEVICES += zyxel_keenetic-extra-ii
 
 define Device/zyxel_keenetic-4g-iii-b-ubootmod
   IMAGE_SIZE := 16128k
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := Keenetic 4G III rev. B
   DEVICE_VARIANT := U-Boot layout
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci \
