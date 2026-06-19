@@ -63,7 +63,7 @@ ramips_setup_interfaces()
 	unielec,u7628-01-16m|\
 	wrtnode,wrtnode2p|\
 	wrtnode,wrtnode2r|\
-	zyxel,keenetic-4g-iii-b|\
+	zyxel,keenetic-4g-iii-b-ubootmod|\
 	zyxel,keenetic-extra-ii)
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "0:wan" "6@eth0"
@@ -292,7 +292,7 @@ ramips_setup_macs()
 		wan_mac=$(mtd_get_mac_binary factory 0x2e)
 		;;
 	keenetic,kn-1613|\
-	zyxel,keenetic-4g-iii-b|\
+	zyxel,keenetic-4g-iii-b-ubootmod|\
 	zyxel,keenetic-extra-ii)
 		wan_mac=$(mtd_get_mac_binary rf-eeprom 0x28)
 		;;

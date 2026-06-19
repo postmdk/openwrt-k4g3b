@@ -5,7 +5,7 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	compatible = "zyxel,keenetic-4g-iii-b", "mediatek,mt7628an-soc";
+	compatible = "zyxel,keenetic-4g-iii-b-ubootmod", "mediatek,mt7628an-soc";
 	model = "Keenetic 4G III rev. B (OpenWrt U-Boot layout)";
 
 	aliases {
