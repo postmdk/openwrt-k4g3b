@@ -3,7 +3,7 @@ name: Build and Release OpenWrt for Keenetic 4G III rev. B (v24.10.7)
 on:
   #push:
   #  branches:
-  #    - mt7628-keenetic-4g3b-v23.10.7
+  #    - mt7628-keenetic-4g3b-v24.10.7
   workflow_dispatch:
 permissions:
   contents: write
