@@ -1,4 +1,4 @@
-name: Build and Release OpenWrt for Keenetic 4G III rev. B
+name: Build and Release OpenWrt for Keenetic 4G III rev. B (v23.05.6)
 
 on:
   #push:
