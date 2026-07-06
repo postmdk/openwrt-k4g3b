@@ -90,7 +90,7 @@
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <10000000>;
-
+		/delete-node/ partitions;
 		partitions {
 			compatible = "fixed-partitions";
 			#address-cells = <1>;
