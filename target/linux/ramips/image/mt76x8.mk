@@ -637,6 +637,19 @@ define Device/tplink_archer-c20-v4
 endef
 TARGET_DEVICES += tplink_archer-c20-v4
 
+define Device/tplink_archer-c20-v4-16m
+  IMAGE_SIZE := 15936k
+  DEVICE_VENDOR := TP-Link
+  DEVICE_MODEL := Archer C20
+  DEVICE_VARIANT := v4 (16M Mod)
+  TPLINK_HWID := 0xc200004
+  TPLINK_HWREVADD := 0x4
+  DEVICE_PACKAGES := kmod-mt76x0e kmod-usb2
+  IMAGES := sysupgrade.bin
+  SUPPORTED_DEVICES := tplink,archer-c20-v4
+endef
+TARGET_DEVICES += tplink_archer-c20-v4-16m
+
 define Device/tplink_archer-c20-v5
   $(Device/tplink-v2)
   IMAGE_SIZE := 7616k
