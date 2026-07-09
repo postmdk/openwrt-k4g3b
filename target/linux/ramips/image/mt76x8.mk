@@ -637,18 +637,18 @@ define Device/tplink_archer-c20-v4
 endef
 TARGET_DEVICES += tplink_archer-c20-v4
 
-define Device/tplink_archer-c20-v4-16m
-  IMAGE_SIZE := 15936k
+define Device/tplink_archer-c20-v4-usb-16m
+  IMAGE_SIZE := 16064k
   DEVICE_VENDOR := TP-Link
   DEVICE_MODEL := Archer C20
-  DEVICE_VARIANT := v4 (16M Mod)
+  DEVICE_VARIANT := v4 (USB 16M Mod)
   TPLINK_HWID := 0xc200004
   TPLINK_HWREVADD := 0x4
   DEVICE_PACKAGES := kmod-mt76x0e kmod-usb-core kmod-usb2 kmod-usb-ohci
   IMAGES := sysupgrade.bin
   SUPPORTED_DEVICES := tplink,archer-c20-v4
 endef
-TARGET_DEVICES += tplink_archer-c20-v4-16m
+TARGET_DEVICES += tplink_archer-c20-v4-usb-16m
 
 define Device/tplink_archer-c20-v5
   $(Device/tplink-v2)
@@ -1257,7 +1257,7 @@ endef
 TARGET_DEVICES += zyxel_keenetic-extra-ii
 
 define Device/zyxel_keenetic-4g-iii-b-ubootmod
-  IMAGE_SIZE := 16128k
+  IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := Keenetic 4G III rev. B
   DEVICE_VARIANT := U-Boot layout

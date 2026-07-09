@@ -49,7 +49,6 @@ ramips_setup_interfaces()
 	kroks,kndrt31r16|\
 	skylab,skw92a|\
 	tplink,archer-c20-v4|\
-	tplink,archer-c20-v4-16m|\
 	tplink,archer-c20-v5|\
 	tplink,archer-c50-v3|\
 	tplink,archer-c50-v4|\
@@ -323,7 +322,6 @@ ramips_setup_macs()
 		wan_mac=$(macaddr_add "$(mtd_get_mac_binary factory 0x28)" 1)
 		;;
 	tplink,archer-c20-v4|\
-	tplink,archer-c20-v4-16m|\
 	tplink,archer-c50-v3|\
 	tplink,tl-mr3420-v5|\
 	tplink,tl-wr840n-v4|\

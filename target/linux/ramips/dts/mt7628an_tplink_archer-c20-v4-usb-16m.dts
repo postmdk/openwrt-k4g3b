@@ -4,7 +4,7 @@
 
 / {
 	compatible = "tplink,archer-c20-v4", "mediatek,mt7628an-soc";
-	model = "TP-Link Archer C20 v4";
+	model = "TP-Link Archer C20 v4 (USB 16M Mod)";
 
 	aliases {
 		led-boot = &led_power;
