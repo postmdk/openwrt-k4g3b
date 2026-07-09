@@ -138,13 +138,13 @@
 };
 
 &esw {
-        mediatek,portmap = <0x3e>;
+        mediatek,portmap = <0x11>;
 };
 
 
 &wmac {
 	status = "okay";
-	nvmem-cells = <&eeprom_factory_0>;
+	nvmem-cells = <&eeprom_factory_0 (-1)>;
 	nvmem-cell-names = "eeprom";
 };
 
