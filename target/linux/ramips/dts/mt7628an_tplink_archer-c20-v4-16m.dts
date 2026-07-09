@@ -162,11 +162,8 @@
 &wmac {
 	status = "okay";
 
-	nvmem-cells = <&eeprom_factory_0000>, <&macaddr_factory_f100 0>;
+	nvmem-cells = <&eeprom_factory_0000>, <&macaddr_factory_f100 (-2)>;
 	nvmem-cell-names = "eeprom", "mac-address";
-
-	/* Современный и правильный способ вычесть 2 из MAC-адреса */
-	mac-address-increment = <(-2)>;
 };
 
 &ethernet {
@@ -195,10 +192,7 @@
 		ieee80211-freq-limit = <5000000 6000000>;
 		
 		/* Ссылаемся на новые актуальные метки из nvmem-layout */
-		nvmem-cells = <&eeprom_factory_8000>, <&macaddr_factory_f100 0>;
+		nvmem-cells = <&eeprom_factory_8000>, <&macaddr_factory_f100 (-1)>;
 		nvmem-cell-names = "eeprom", "mac-address";
-
-		/* Вычитаем 1 из базового MAC-адреса, как было задумано вендором (-1) */
-		mac-address-increment = <(-1)>;
 	};
 };

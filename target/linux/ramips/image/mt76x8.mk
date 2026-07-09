@@ -644,7 +644,7 @@ define Device/tplink_archer-c20-v4-16m
   DEVICE_VARIANT := v4 (16M Mod)
   TPLINK_HWID := 0xc200004
   TPLINK_HWREVADD := 0x4
-  DEVICE_PACKAGES := kmod-mt76x0e kmod-usb2
+  DEVICE_PACKAGES := kmod-mt76x0e kmod-usb-core kmod-usb2 kmod-usb-ohci
   IMAGES := sysupgrade.bin
   SUPPORTED_DEVICES := tplink,archer-c20-v4
 endef
