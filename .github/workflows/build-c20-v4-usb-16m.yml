@@ -1,4 +1,4 @@
-name: Build and Release OpenWrt for Keenetic 4G III rev. B (v24.10.7)
+name: Build and Release OpenWrt for TP-Link Archer C20 V4 USB 16m (v24.10.7)
 
 on:
   #push:
