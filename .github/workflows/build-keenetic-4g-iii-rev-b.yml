@@ -62,7 +62,38 @@ jobs:
       id: organize
       run: |
         mkdir -p out/
-        # Жёстко забираем все файлы (прошивки, манифесты, json, xz-архивы) без привязки к имени
+         # Ищем архив ImageBuilder (поддерживает и .tar.xz, и .tar.zst)
+        IB_ARCHIVE=$(find bin/targets/ramips/mt76x8/ -maxdepth 1 -name "openwrt-imagebuilder-*.tar.*" | head -n 1)
+
+        if [ -n "$IB_ARCHIVE" ]; then
+          echo "Распаковываем ImageBuilder: $IB_ARCHIVE"
+          TMP_DIR=$(mktemp -d)
+
+          if [[ "$IB_ARCHIVE" == *.zst ]]; then
+            tar --zstd -xf "$IB_ARCHIVE" -C "$TMP_DIR"
+          else
+            tar -xf "$IB_ARCHIVE" -C "$TMP_DIR"
+          fi
+
+          IB_DIR=$(find "$TMP_DIR" -maxdepth 1 -type d -name "openwrt-imagebuilder-*")
+
+          # Копируем ИСКЛЮЧИТЕЛЬНО base-files (.ipk или .apk)
+          echo "Копируем только base-files в $IB_DIR/packages/..."
+          find bin/ -type f \( -name "base-files*.apk" -o -name "base-files*.ipk" \) -exec cp {} "$IB_DIR/packages/" \;
+
+          # Переупаковываем обратно
+          ARCHIVE_NAME=$(basename "$IB_ARCHIVE")
+          echo "Запаковываем обратно в out/$ARCHIVE_NAME..."
+
+          if [[ "$ARCHIVE_NAME" == *.zst ]]; then
+            tar --zstd -cf "out/$ARCHIVE_NAME" -C "$TMP_DIR" "$(basename "$IB_DIR")"
+          else
+            tar -cJf "out/$ARCHIVE_NAME" -C "$TMP_DIR" "$(basename "$IB_DIR")"
+          fi
+
+          rm -rf "$TMP_DIR" "$IB_ARCHIVE"
+        fi
+        #  забираем все файлы (прошивки, манифесты, json, xz-архивы) без привязки к имени
         find bin/targets/ramips/mt76x8/ -maxdepth 1 -type f -exec cp {} out/ \;
         echo "TAG_NAME=build-$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
