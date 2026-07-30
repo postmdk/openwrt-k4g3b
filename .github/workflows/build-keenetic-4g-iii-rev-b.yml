@@ -36,8 +36,8 @@ jobs:
 
     - name: Load and Adapt Custom Configuration
       run: |
-        if [ -f keenetic_4g_iii_rev_b.config ]; then
-          cp keenetic_4g_iii_rev_b.config .config
+        if [ -f config.buildinfo ]; then
+          cp config.buildinfo .config
         elif [ -f target/linux/ramips/image/keenetic_4g_iii_rev_b.config ]; then
           cp target/linux/ramips/image/keenetic_4g_iii_rev_b.config .config
         else
